@@ -55,3 +55,17 @@ services:
       - POSTGRES_USER=${CLIENT_ORDERS_POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${CLIENT_ORDERS_POSTGRES_PASSWORD}
       - POSTGRES_DB=${CLIENT_ORDERS_POSTGRES_DBNAME}
+
+  payments-ms:
+    build: ./payments-ms
+    ports:
+      - ${PAYMENTS_MS_PORT}:${PAYMENTS_MS_PORT}
+    volumes:
+      - ./payments-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=${PAYMENTS_MS_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - FRONTEND_URL=${STRIPE_FRONTEND_URL}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
